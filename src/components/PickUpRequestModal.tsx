@@ -33,7 +33,7 @@ const PickUpRequestModal: React.FC<PickUpRequestModalProps> = ({ onClose }) => {
   };
 
   return (
-    <Stack spacing="sm">
+    <Stack gap="sm">
       <TextInput
         label="Full Name"
         placeholder="Your name"

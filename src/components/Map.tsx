@@ -2,7 +2,7 @@
 'use client';
 
 import { Text } from '@mantine/core';
-import { Icon } from 'leaflet';
+import { Icon, LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -23,10 +23,14 @@ interface MapProps {
   shuttles: Shuttle[];
 }
 
-const Map = ({ shuttles }: MapProps) => {
-  const defaultPosition: [number, number] = [10.6918, -61.2225]; // Replace with your default coordinates
+interface ExtendedIconDefault extends Icon.Default {
+  _getIconUrl?: () => void;
+}
 
-  const centerPosition =
+const Map = ({ shuttles }: MapProps) => {
+  const defaultPosition: LatLngTuple = [10.6918, -61.2225]; // Replace with your default coordinates
+
+  const centerPosition: LatLngTuple =
     shuttles.length > 0
       ? [shuttles[0].location.latitude, shuttles[0].location.longitude]
       : defaultPosition;
@@ -34,14 +38,14 @@ const Map = ({ shuttles }: MapProps) => {
   // Create a custom icon
   const shuttleIcon = new Icon({
     iconUrl: '/shuttle-icon.png',
-    iconSize: [80, 80],
+    iconSize: [60, 60],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40],
   });
 
   useEffect(() => {
     // Fix for default marker icon not showing
-    delete (Icon.Default.prototype as any)._getIconUrl;
+    delete (Icon.Default.prototype as ExtendedIconDefault)._getIconUrl;
   }, []);
 
   return (
